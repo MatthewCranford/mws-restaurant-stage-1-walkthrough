@@ -27,38 +27,54 @@ self.addEventListener('install', function(e) {
     );
 });
 
+// self.addEventListener('fetch', function(e) {
+//     e.respondWith(
+//         caches.match(e.request).then(function(response) {
+//             if (response) {
+//                 console.log('Found ', e.request, ' in cache')
+//                 return response;
+//             }
+//             else {
+//                 console.log('Could not find ', e.request, ' in cache, FETCHING!');
+//                 return fetch(e.request)
+//                 .then(function(response) {
+//                     const responseClone = response.clone();
+//                     caches.open('v1').then(function(cache) {
+//                         cache.put(e.request, responseClone);
+//                     })
+//                     return response;
+//                 })
+//                 .catch(function(err) {
+//                     console.error(err);
+//                 });
+//             }
+//         })
+//     );
+// });
 self.addEventListener('fetch', function(e) {
     e.respondWith(
         caches.match(e.request).then(function(response) {
             if (response) {
-                console.log('Found ', e.request, ' in cache')
+                console.log('Found ', e.request, ' in cache');
                 return response;
             }
             else {
                 console.log('Could not find ', e.request, ' in cache, FETCHING!');
                 return fetch(e.request)
-                // .then(function(response) {
-                //     const responseClone = response.clone();
-                //     caches.open('v1').then(function(cache) {
-                //         cache.put(e.request, response);
-                //     })
-                //     return response;
-                // })
-                // .catch(function(err) {
-                //     console.error(err);
-                // });
+                .then(function(response) {
+                    caches.open('v1').then(function(cache) {
+                        cache.put(e.request, response);
+                    })
+                    return response;
+                })
+                .catch(function(err) {
+                    console.error(err);
+                });
             }
         })
     );
-})
+});
 
-self.addEventListener('fetch', function(e) {
-    e.respondWith(
-        caches.match(e.request).then(function(response) {
-
-        })
-    );
-})
 
 
 
